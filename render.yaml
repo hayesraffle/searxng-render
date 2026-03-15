@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: searxng
+    runtime: docker
+    plan: starter
+    healthCheckPath: /healthz
+    envVars:
+      - key: SEARXNG_SECRET
+        generateValue: true
