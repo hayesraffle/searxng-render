@@ -1,4 +1,12 @@
-use_default_settings: true
+use_default_settings:
+  engines:
+    keep_only:
+      - google
+      - bing
+      - duckduckgo
+      - brave
+      - wikipedia
+      - google news
 
 general:
   instance_name: "ThreeArch Search"
@@ -8,7 +16,6 @@ search:
   safe_search: 0
   autocomplete: ""
   formats:
-    - html
     - json
 
 server:
@@ -19,34 +26,3 @@ server:
 
 ui:
   static_use_hash: true
-
-engines:
-  - name: google
-    engine: google
-    shortcut: g
-    disabled: false
-
-  - name: bing
-    engine: bing
-    shortcut: b
-    disabled: false
-
-  - name: duckduckgo
-    engine: duckduckgo
-    shortcut: ddg
-    disabled: false
-
-  - name: brave
-    engine: brave
-    shortcut: br
-    disabled: false
-
-  - name: wikipedia
-    engine: wikipedia
-    shortcut: wp
-    disabled: false
-
-  - name: google news
-    engine: google_news
-    shortcut: gn
-    disabled: false
