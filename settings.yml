@@ -22,6 +22,17 @@ use_default_settings:
       - duckduckgo news
       - qwant news
 
+# keep_only preserves each engine's default disabled flag — qwant/mojeek/qwant news
+# are disabled by default in this build, so they must be re-enabled explicitly
+# (verified 2026-07-02: without this, general category had zero active engines).
+engines:
+  - name: qwant
+    disabled: false
+  - name: mojeek
+    disabled: false
+  - name: qwant news
+    disabled: false
+
 general:
   instance_name: "ThreeArch Search"
   debug: false
