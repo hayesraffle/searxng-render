@@ -1,12 +1,26 @@
 use_default_settings:
   engines:
+    # Engine mix per the 2026-07-02 pipeline audit (ThreeArch repo,
+    # docs/agent-optimization/SUPERFORECASTER-ROADMAP.md):
+    # - bing (general) REMOVED: its scraper degenerates multi-word queries to the
+    #   first token ("U.S.-Iran peace deal…" → results for "U") and was the sole
+    #   surviving general engine — the root cause of junk research reaching agents.
+    # - google/duckduckgo/brave/startpage (general) REMOVED: permanently
+    #   blocked/captcha'd/rate-limited from Render's shared egress IP (google fails
+    #   SILENTLY with 0 results). With them gone, a general query that finds nothing
+    #   returns 0 results and the bots' Serper fallback fires correctly instead of
+    #   accepting junk.
+    # - qwant + mojeek ADDED for general: tolerant of datacenter IPs.
+    # - news engines kept to the trio measured working on-topic from this IP
+    #   (bing news is fine — only bing GENERAL degenerates); reuters (401),
+    #   yahoo news (protocol error), google news (dead) dropped.
     keep_only:
-      - google
-      - bing
-      - duckduckgo
-      - brave
+      - qwant
+      - mojeek
       - wikipedia
-      - google news
+      - bing news
+      - duckduckgo news
+      - qwant news
 
 general:
   instance_name: "ThreeArch Search"
