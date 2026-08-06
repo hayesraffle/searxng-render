@@ -1,5 +1,8 @@
 use_default_settings:
   engines:
+    # THIS INSTANCE SERVES NEWS ONLY. General web search is intentionally empty —
+    # see the 2026-08-05 note below before adding a general engine back.
+    #
     # Engine mix per the 2026-07-02 pipeline audit (ThreeArch repo,
     # docs/agent-optimization/SUPERFORECASTER-ROADMAP.md):
     # - bing (general) REMOVED: its scraper degenerates multi-word queries to the
@@ -14,24 +17,25 @@ use_default_settings:
     # - news engines kept to the trio measured working on-topic from this IP
     #   (bing news is fine — only bing GENERAL degenerates); reuters (401),
     #   yahoo news (protocol error), google news (dead) dropped.
+    #
+    # 2026-08-05 follow-up — the last three general engines have since died, so
+    # they are removed rather than left to time out. Measured from Render:
+    # - qwant + qwant news: "access denied" on every request (HTTP 200 from a
+    #   residential IP → datacenter block, not an outage). Both dropped.
+    # - mojeek: httpx.ConnectTimeout on every request, burning the full 3.0s engine
+    #   timeout before returning nothing (403 from a residential IP — it refuses
+    #   SearXNG either way). Dropped.
+    # - wikipedia: HTTP 400. The bots send whole market titles as queries and the
+    #   REST summary endpoint takes a page title, so a "/" in the question (e.g.
+    #   "$95.00/barrel") breaks the path. Useless for forecasting queries anyway.
+    # Net effect: general now returns 0 INSTANTLY instead of blocking ~3.2s on
+    # mojeek's timeout first, so the bots' Serper fallback fires ~3s sooner on every
+    # general search. Same results, same cost, less latency, no error-log spam.
+    # Remaining news pair verified contributing on 4 oil queries (2026-08-05):
+    # duckduckgo news 3–22 results, bing news 3–8, per query.
     keep_only:
-      - qwant
-      - mojeek
-      - wikipedia
       - bing news
       - duckduckgo news
-      - qwant news
-
-# keep_only preserves each engine's default disabled flag — qwant/mojeek/qwant news
-# are disabled by default in this build, so they must be re-enabled explicitly
-# (verified 2026-07-02: without this, general category had zero active engines).
-engines:
-  - name: qwant
-    disabled: false
-  - name: mojeek
-    disabled: false
-  - name: qwant news
-    disabled: false
 
 general:
   instance_name: "ThreeArch Search"
